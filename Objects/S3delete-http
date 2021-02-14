@@ -1,0 +1,28 @@
+#!/bin/bash
+# Original Source of the script :https://www.burgundywall.com/post/upload-minio-curl
+# usage: ./S3delete-http my-bucket my-file.zip
+
+bucket=$1
+file=$2
+
+#Proxyhost
+host=10.48.13.222
+#Secondary Objectstorage
+#host=10.38.4.162
+#Primary Object Storage
+#host=10.38.3.226
+s3_key='AEfjlvVgsfSSRHh98zY6ou3O5S2cfIBz'
+s3_secret='UqS5_VpeOYOZqsAmWynyW6BHa-vwNCHH'
+
+resource="/${bucket}/${file}"
+content_type="application/octet-stream"
+date=`date -R`
+_signature="DELETE\n\n${content_type}\n${date}\n${resource}"
+signature=`echo -en ${_signature} | openssl sha1 -hmac ${s3_secret} -binary | base64`
+
+curl -k -v -X DELETE \
+          -H "Host: $host" \
+          -H "Date: ${date}" \
+          -H "Content-Type: ${content_type}" \
+          -H "Authorization: AWS ${s3_key}:${signature}" \
+          http://$host${resource}
