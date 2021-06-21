@@ -1,5 +1,0 @@
-multicluster remove-from-multicluster external-ip-address-or-svm-ips=x.x.x.x username=admin password=Nutanix.123 force=true
-
-Unregister Files from PC :
-Here the example.  It's an NCLI command from a CVM for the cluster you want to unregister
-Where that IP address is your PC.
